@@ -218,18 +218,25 @@ The backend trims the search value and compares it against `fullName` in a case-
 ## Request Flow
 
 ```text
-React Frontend
-     |
-     | fetch("/users?search=su")
-     v
-Express Backend
-     |
-     | filters users from in-memory array
-     v
+User Types Search
+        |
+        v
+React Frontend (Fetch API)
+        |
+        v
+GET /users?search=su
+        |
+        v
+Express.js Backend
+        |
+        v
+Filter In-Memory Users
+        |
+        v
 JSON Response
-     |
-     v
-React renders matching user cards
+        |
+        v
+React Updates UI
 ```
 
 ## Implementation Notes
@@ -238,10 +245,18 @@ The backend is split into routes, controllers, middleware, and in-memory data so
 
 The React frontend keeps the UI state simple with `useState` and fetches data with `useEffect`. The search input calls the backend with the `search` query parameter, then renders the filtered users returned by the API.
 
+## Design Decisions
+
+- Kept the backend modular by separating routes, controllers, middleware, and data.
+- Used an in-memory data store because persistence was not required.
+- Performed search on the backend to simulate a real API workflow.
+- Used React Hooks (`useState` and `useEffect`) to keep the frontend simple and predictable.
+- Kept API responses consistent for easier frontend integration.
+
 ## Error Handling
 
-- Invalid user IDs return `400`.
-- Missing users return `404`.
+- Invalid user IDs, such as `/users/abc`, return `400`.
+- Valid numeric IDs that do not exist, such as `/users/99`, return `404`.
 - Unknown routes return `404`.
 - Unexpected errors return `500`.
 - The frontend shows an error message if an API request fails.
