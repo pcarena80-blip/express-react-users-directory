@@ -215,13 +215,28 @@ GET /users?search=<typed-value>
 
 The backend trims the search value and compares it against `fullName` in a case-insensitive way. If the search box is empty, the backend returns all users.
 
+## Request Flow
+
+```text
+React Frontend
+     |
+     | fetch("/users?search=su")
+     v
+Express Backend
+     |
+     | filters users from in-memory array
+     v
+JSON Response
+     |
+     v
+React renders matching user cards
+```
+
 ## Implementation Notes
 
 The backend is split into routes, controllers, middleware, and in-memory data so each part of the API is easy to review. For a small assignment this could be written in fewer files, but this structure keeps the request handling, business logic, and error handling clear.
 
 The React frontend keeps the UI state simple with `useState` and fetches data with `useEffect`. The search input calls the backend with the `search` query parameter, then renders the filtered users returned by the API.
-
-The users are stored in memory because the assignment does not require a database.
 
 ## Error Handling
 
